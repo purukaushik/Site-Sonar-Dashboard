@@ -2,6 +2,13 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var router = express.Router();
 
+router.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+
 /* Import Mongo Dependencies */
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
