@@ -15,7 +15,6 @@ var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
 var url = process.env.MONGODB_URI;
 
->>>>>>> master
 /* GET home page. */
 router.get('/', function(req, res) {
     try {
