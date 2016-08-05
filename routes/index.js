@@ -164,7 +164,7 @@ router.get('/networksbyfilesize', function(req,res) {
                     {
                         $group: {
                             _id : "$adNetwork",
-                            fileSize : { $avg : "$fileSize"}
+                            fileSize : {$avg : "$fileSize"},
                         }
                     },
                     {
@@ -172,6 +172,32 @@ router.get('/networksbyfilesize', function(req,res) {
                             fileSize: -1
                         }
                     },
+                    {
+                      $project:{
+                          _id:"$_id",
+                          fileSize:{
+                              $divide:[
+                                  "$fileSize", 1024
+                              ]
+                          }
+                      }
+                    },
+                    {
+                        $project:
+                        {
+                            _id: "$_id",
+                            fileSize:
+                            {
+                                $divide:[
+                                    {$subtract:[
+                                        {$multiply:["$fileSize",10]},
+                                        {$mod:[{$multiply:["$fileSize",10]}, 1]}
+                                    ]},
+                                    10
+                                ]
+                            }
+                        }
+                    }
                 ]).toArray(function (err, fileSizes){
                     benchmarkDB.find().count(function (err, total) {
                         res.render('networksbyfilesize.html', { records : fileSizes.slice(0,99)});
